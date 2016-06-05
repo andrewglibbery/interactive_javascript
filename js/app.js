@@ -7,17 +7,29 @@ var incompleteTasksHolder = document.getElementById('incomplete-tasks'); //incom
 var completedTasksHolder = document.getElementById('completed-tasks'); //complete-tasks
 
 
+var createNewTaskElement = function(taskString) {
+	var listItem = document.createElement("li");
+//input (checkbox)
+	var checkbox = document.createElement("input");
+	//label
+	var label = document.createElement("label");
+	//input (text)
+	var editInput = document.createElement("input");
+	//button.edit
+	var editButton = document .createElement("button");
+	//button.delete
+	var deleteButton = document.createElement("button");
+	//EAch elements, needs modified and appended
+	return listItem;
+}
+
+
 // add a new task
 var addTask = function() {
 	console.log("add task...");
 	//when button pressed
 	//create new list item with text from #new-task
-	//input (checkbox)
-	//label
-	//input (text)
-	//button.edit
-	//button.delete
-	//EAch elements, needs modified and appended
+	var listItem = createNewTaskElement("Some New Task");
 }
 
 // edit existing task
@@ -56,7 +68,36 @@ var taskIncomplete = function() {
 		//Appedn the task list item to the #incompleted-task
 }
 
+var bindTaskEvents = function(taskListItem, checkBoxEventHandler) {
+	console.log("bind task events");
+	//select it's children
+	var checkbox = taskListItem.querySelector("input[type=checkbox]");
+	var editButton = taskListItem.querySelector("button.edit");
+	var deleteButton = taskListItem.querySelector("button.delete");
+		// bind editTask to edit button
+		editButton.onclick = editTask;
+		//bin deleteTask to delete button
+		deleteButton.onclick = deleteTask;
+		// bind checkBoxEventHandler to checkbox
+		checkbox.onchange = checkBoxEventHandler;
+}
+
 addButton.onclick = addTask;
+
+
+//cycle over incompleteTaskHolder ul list items
+for(var i = 0; i < incompleteTasksHolder.children.length; i += 1) {
+	bindTaskEvents(incompleteTasksHolder.children[i], taskComplete);
+}	
+	//for each item
+		//bind events to list items's children (taskCompleted)
+
+//cycle over completeTaskHolder ul list items
+for(var i = 0; i < completedTasksHolder.children.length; i += 1) {
+	bindTaskEvents(completedTasksHolder.children[i], taskIncomplete);
+}
+	//for each item
+		//bind events to list items's children (taskIncompleted)
 
 
 
