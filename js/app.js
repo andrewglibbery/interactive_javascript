@@ -20,6 +20,23 @@ var createNewTaskElement = function(taskString) {
 	//button.delete
 	var deleteButton = document.createElement("button");
 	//EAch elements, needs modified and appended
+	
+	checkbox.type = "checkbox";
+	editInput.type = "text";
+	editButton.innerText = "Edit";
+	editButton.className = "edit";
+	deleteButton.innerText = "Delete";
+	deleteButton.className = "delete";
+
+	label.innerText = taskString;
+
+	listItem.appendChild(checkbox);
+	listItem.appendChild(label);
+	listItem.appendChild(editInput);
+	listItem.appendChild(editButton);
+	listItem.appendChild(deleteButton);
+
+
 	return listItem;
 }
 
@@ -29,13 +46,30 @@ var addTask = function() {
 	console.log("add task...");
 	//when button pressed
 	//create new list item with text from #new-task
-	var listItem = createNewTaskElement("Some New Task");
+	var listItem = createNewTaskElement(taskInput.value);
+
+	incompleteTasksHolder.appendChild(listItem);
+	bindTaskEvents(listItem, taskComplete);
+	taskInput.value = "";
 }
 
 // edit existing task
 var editTask = function() {
 	console.log("edit task...");
+
+	var listItem = this.parentNode;
+	var editInput = listItem.querySelector("input[type=text]");
+	var label = listItem.querySelector("label");
+
+	var containsClass = listItem.classList.contains("editMode");
+
+
 	//When edi button press
+	if(containsClass) {
+		label.innerText = editInput.value;
+	} else {
+		editInput.value = label.innerText;
+	}
 		//if class of parent is .editMode
 			//Switch from .editMode
 			//label text become the input's value
@@ -44,26 +78,40 @@ var editTask = function() {
 			//input value becomes the label's text
 
 		//Toggle .editMode of the parent
+	listItem.classList.toggle("editMode");
 }
 
 
 // delete existing task
 var deleteTask = function() {
 	console.log("delete task...");
+
+	var listItem = this.parentNode;
+	var ul = listItem.parentNode;
 	//when delete button pressed
 		//Remove the parent list item fron the ul
+	ul.removeChild(listItem);
 }
 
 // mark a task as complete
 var taskComplete = function() {	
 	console.log("complete task...");
 	//When checkbox is checked
+var listItem = this.parentNode;
+
+completedTasksHolder.appendChild(listItem);
+bindTaskEvents(listItem, taskIncomplete);
 		//Append the task list item to the #completed-task
 }
 
 //Mark a task as incomplete
 var taskIncomplete = function() {
 	console.log("incomplete task...");
+
+	var listItem = this.parentNode;
+
+	incompleteTasksHolder.appendChild(listItem);
+	bindTaskEvents(listItem, taskComplete);
 	//When checkbox is unchecked
 		//Appedn the task list item to the #incompleted-task
 }
